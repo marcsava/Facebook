@@ -9,7 +9,7 @@ For directed graphs see DiGraph and MultiDiGraph.
 """
 
 from reportviews import *
-
+from exception import *
 __all__ = ["Graph"]
 
 
@@ -22,8 +22,8 @@ class Graph:
     edge_attr_dict_factory = dict
     graph_attr_dict_factory = dict
 
-    def to_directed_class(self):
-        return nx.DiGraph
+   # def to_directed_class(self):
+    #    return nx.DiGraph
 
     def to_undirected_class(self):
          return Graph
@@ -40,14 +40,14 @@ class Graph:
         self._node = self.node_dict_factory()  # empty node attribute dict
         self._adj = self.adjlist_outer_dict_factory()  # empty adjacency dict
         # attempt to load graph with data
-        if incoming_graph_data is not None:
-            convert.to_networkx_graph(incoming_graph_data, create_using=self)
+     #   if incoming_graph_data is not None:
+     #       convert.to_networkx_graph(incoming_graph_data, create_using=self)
 
         self.graph.update(attr)
 
-    @property
-    def adj(self):
-        return AdjacencyView(self._adj)
+  #  @property
+  #  def adj(self):
+   #     return AdjacencyView(self._adj)
 
     @property
     def name(self):
@@ -280,60 +280,6 @@ class Graph:
 
     def is_directed(self):
         return False
-
-    def copy(self, as_view=False):
-        if as_view is True:
-            return nx.graphviews.generic_graph_view(self)
-        G = self.__class__()
-        G.graph.update(self.graph)
-        G.add_nodes_from((n, d.copy()) for n, d in self._node.items())
-        G.add_edges_from(
-            (u, v, datadict.copy())
-            for u, nbrs in self._adj.items()
-            for v, datadict in nbrs.items()
-        )
-        return G
-
-    def to_directed(self, as_view=False):
-        graph_class = self.to_directed_class()
-        if as_view is True:
-            return nx.graphviews.generic_graph_view(self, graph_class)
-        # deepcopy when not a view
-        G = graph_class()
-        G.graph.update(deepcopy(self.graph))
-        G.add_nodes_from((n, deepcopy(d)) for n, d in self._node.items())
-        G.add_edges_from(
-            (u, v, deepcopy(data))
-            for u, nbrs in self._adj.items()
-            for v, data in nbrs.items()
-        )
-        return G
-
-    def to_undirected(self, as_view=False):
-        graph_class = self.to_undirected_class()
-        if as_view is True:
-            return nx.graphviews.generic_graph_view(self, graph_class)
-        # deepcopy when not a view
-        G = graph_class()
-        G.graph.update(deepcopy(self.graph))
-        G.add_nodes_from((n, deepcopy(d)) for n, d in self._node.items())
-        G.add_edges_from(
-            (u, v, deepcopy(d))
-            for u, nbrs in self._adj.items()
-            for v, d in nbrs.items()
-        )
-        return G
-
-    def subgraph(self, nodes):
-        induced_nodes = nx.filters.show_nodes(self.nbunch_iter(nodes))
-        # if already a subgraph, don't make a chain
-        subgraph = nx.graphviews.subgraph_view
-        if hasattr(self, "_NODE_OK"):
-            return subgraph(self._graph, induced_nodes, self._EDGE_OK)
-        return subgraph(self, induced_nodes)
-
-    def edge_subgraph(self, edges):
-        return nx.edge_subgraph(self, edges)
 
     def size(self, weight=None):
         s = sum(d for v, d in self.degree(weight=weight))
