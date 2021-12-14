@@ -10,9 +10,6 @@ class Graph:
     edge_attr_dict_factory = dict
     graph_attr_dict_factory = dict
 
-    def to_undirected_class(self):
-         return Graph
-
     def __init__(self, incoming_graph_data=None, **attr):
         self.graph_attr_dict_factory = self.graph_attr_dict_factory
         self.node_dict_factory = self.node_dict_factory
@@ -26,49 +23,14 @@ class Graph:
         self._adj = self.adjlist_outer_dict_factory()  # empty adjacency dict
 
         self.graph.update(attr)
-
-    @property
-    def name(self):
-        return self.graph.get("name", "")
-
-    @name.setter
-    def name(self, s):
-        self.graph["name"] = s
-
-    def __str__(self):
-        return "".join(
-            [
-                type(self).__name__,
-                f" named {self.name!r}" if self.name else "",
-                f" with {self.number_of_nodes()} nodes and {self.number_of_edges()} edges",
-            ]
-        )
-
-    def __iter__(self):
-        return iter(self._node)
-
+#--
     def __contains__(self, n):
         try:
             return n in self._node
         except TypeError:
             return False
 
-    def __len__(self):
-        return len(self._node)
-
-    def __getitem__(self, n):
-        return self.adj[n]
-
-    def add_node(self, node_for_adding, **attr):
-        if node_for_adding not in self._node:
-            if node_for_adding is None:
-                raise ValueError("None cannot be a node")
-            self._adj[node_for_adding] = self.adjlist_inner_dict_factory()
-            attr_dict = self._node[node_for_adding] = self.node_attr_dict_factory()
-            attr_dict.update(attr)
-        else:  # update attr even if node already exists
-            self._node[node_for_adding].update(attr)
-
+#--
     @property
     def nodes(self):
         nodes = NodeView(self)
@@ -78,17 +40,6 @@ class Graph:
         self.__dict__["nodes"] = nodes
         return nodes
 
-    def number_of_nodes(self):
-        return len(self._node)
-
-    def order(self):
-        return len(self._node)
-
-    def has_node(self, n):
-        try:
-            return n in self._node
-        except TypeError:
-            return False
 
     def add_edge(self, u_of_edge, v_of_edge, **attr):
         u, v = u_of_edge, v_of_edge
@@ -107,11 +58,11 @@ class Graph:
         datadict.update(attr)
         self._adj[u][v] = datadict
         self._adj[v][u] = datadict
-
+#--
     @property
     def edges(self):
         return EdgeView(self)
-
+#--
     def nbunch_iter(self, nbunch=None):
         if nbunch is None:  # include all nodes via iterator
             bunch = iter(self._adj)
