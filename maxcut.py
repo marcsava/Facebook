@@ -1,25 +1,14 @@
 from itertools import chain
 
 def edge_boundary(G, nbunch1, nbunch2=None, data=False, keys=False, default=None):
-
     nset1 = {n for n in nbunch1 if n in G}
-    if G.is_multigraph():
-        edges = G.edges(nset1, data=data, keys=keys, default=default)
-    else:
-        edges = G.edges(nset1, data=data, default=default)
-    if nbunch2 is None:
-        return (e for e in edges if (e[0] in nset1) ^ (e[1] in nset1))
+    edges = G.edges(nset1, data=data, default=default)
+    return (e for e in edges if (e[0] in nset1) ^ (e[1] in nset1))
     nset2 = set(nbunch2)
-    return (
-        e
-        for e in edges
-        if (e[0] in nset1 and e[1] in nset2) or (e[1] in nset1 and e[0] in nset2)
-    )
 
+# 20.23
 def cut_size(G, S, T=None, weight=None):
     edges = edge_boundary(G, S, T, data=weight, default=1)
-    if G.is_directed():
-        edges = chain(edges, edge_boundary(G, T, S, data=weight, default=1))
     return sum(weight for u, v, weight in edges)
 
 def _swap_node_partition(cut, node):
