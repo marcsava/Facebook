@@ -1,5 +1,5 @@
 from itertools import chain
-
+from graph import *
 def edge_boundary(G, nbunch1, nbunch2=None, data=False, keys=False, default=None):
     nset1 = {n for n in nbunch1 if n in G}
     edges = G.edges(nset1, data=data, default=default)
@@ -14,7 +14,7 @@ def cut_size(G, S, T=None, weight=None):
 def _swap_node_partition(cut, node):
     return cut - {node} if node in cut else cut.union({node})
 
-def one_exchange(G, initial_cut=None, seed=None, weight=None):
+def maxcut(G, initial_cut=None, seed=None, weight=None):
     if initial_cut is None:
         initial_cut = set()
     cut = set(initial_cut)
@@ -40,3 +40,12 @@ def one_exchange(G, initial_cut=None, seed=None, weight=None):
 
     partition = (cut, G.nodes - cut)
     return current_cut_size, partition
+
+def facebook_enmy(V,E):
+    G = Graph()
+    for key in E:
+        G.add_edge((key[0]),(key[1]), weight = E[key])
+    sum_weight , partition = maxcut(G, weight='weight')
+    print('The sum cut is', sum_weight)
+    return partition[0], partition[1]
+
