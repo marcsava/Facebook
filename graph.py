@@ -7,13 +7,6 @@ Self-loops are allowed but multiple edges are not (see MultiGraph).
 
 For directed graphs see DiGraph and MultiDiGraph.
 """
-from copy import deepcopy
-
-import networkx as nx
-from networkx.classes.coreviews import AdjacencyView
-from networkx.classes.reportviews import NodeView, EdgeView, DegreeView
-from networkx.exception import NetworkXError
-import networkx.convert as convert
 
 __all__ = ["Graph"]
 
@@ -47,7 +40,7 @@ class Graph:
         # attempt to load graph with data
         if incoming_graph_data is not None:
             convert.to_networkx_graph(incoming_graph_data, create_using=self)
-        # load graph attributes (must be after convert)
+
         self.graph.update(attr)
 
     @property
