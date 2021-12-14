@@ -1,6 +1,7 @@
 from graph import *
 from maxcut import *
 
+
 G = Graph()
 G.add_edge('A', 'B', weight=20)
 G.add_edge('A', 'C', weight=4)
