@@ -43,9 +43,9 @@ def maxcut(G, initial_cut=None, weight=None):
 
 def facebook_enmy(V,E):
     G = Graph()
-    #Inserire controllo V e chiavi in E altrimenti non ha senso passare anche V
     for key in E:
-        G.add_edge((key[0]),(key[1]), weight = E[key])
+        if key[0] in V and key[1] in V:
+            G.add_edge((key[0]),(key[1]), weight = E[key])
     sum_weight , partition = maxcut(G, weight='weight')
     print('The sum_weight is', sum_weight)
     return partition[0], partition[1]
