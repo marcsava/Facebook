@@ -1,16 +1,16 @@
 from reportviews import *
-from exception import *
 __all__ = ["Graph"]
 
 class Graph:
     node_dict_factory = dict
-    node_attr_dict_factory = dict
     adjlist_outer_dict_factory = dict
+    graph_attr_dict_factory = dict
+    node_attr_dict_factory = dict
     adjlist_inner_dict_factory = dict
     edge_attr_dict_factory = dict
-    graph_attr_dict_factory = dict
 
-    def __init__(self, incoming_graph_data=None, **attr):
+
+    def __init__(self):
         '''
         self.graph_attr_dict_factory = self.graph_attr_dict_factory
         self.node_dict_factory = self.node_dict_factory
@@ -60,6 +60,7 @@ class Graph:
         datadict.update(attr)
         self._adj[u][v] = datadict
         self._adj[v][u] = datadict
+        print()
 #--
     @property
     def edges(self):
@@ -76,7 +77,6 @@ class Graph:
                 for n in nlist:
                         if n in adj:
                             yield n
-
                 '''
                 try:
                     for n in nlist:

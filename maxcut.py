@@ -1,12 +1,12 @@
 from itertools import chain
 from graph import *
+
 def edge_boundary(G, nbunch1, nbunch2=None, data=False, keys=False, default=None):
     nset1 = {n for n in nbunch1 if n in G}
     edges = G.edges(nset1, data=data, default=default)
     return (e for e in edges if (e[0] in nset1) ^ (e[1] in nset1))
-    nset2 = set(nbunch2)
 
-# 20.23
+
 def cut_size(G, S, T=None, weight=None):
     edges = edge_boundary(G, S, T, data=weight, default=1)
     return sum(weight for u, v, weight in edges)
@@ -14,7 +14,7 @@ def cut_size(G, S, T=None, weight=None):
 def _swap_node_partition(cut, node):
     return cut - {node} if node in cut else cut.union({node})
 
-def maxcut(G, initial_cut=None, seed=None, weight=None):
+def maxcut(G, initial_cut=None, weight=None):
     if initial_cut is None:
         initial_cut = set()
     cut = set(initial_cut)
@@ -43,6 +43,7 @@ def maxcut(G, initial_cut=None, seed=None, weight=None):
 
 def facebook_enmy(V,E):
     G = Graph()
+    #Inserire controllo V e chiavi in E altrimenti non ha senso passare anche V
     for key in E:
         G.add_edge((key[0]),(key[1]), weight = E[key])
     sum_weight , partition = maxcut(G, weight='weight')
