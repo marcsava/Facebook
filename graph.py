@@ -11,18 +11,18 @@ class Graph:
     graph_attr_dict_factory = dict
 
     def __init__(self, incoming_graph_data=None, **attr):
+        '''
         self.graph_attr_dict_factory = self.graph_attr_dict_factory
         self.node_dict_factory = self.node_dict_factory
         self.node_attr_dict_factory = self.node_attr_dict_factory
         self.adjlist_outer_dict_factory = self.adjlist_outer_dict_factory
         self.adjlist_inner_dict_factory = self.adjlist_inner_dict_factory
         self.edge_attr_dict_factory = self.edge_attr_dict_factory
-
+        '''
         self.graph = self.graph_attr_dict_factory()  # dictionary for graph attributes
         self._node = self.node_dict_factory()  # empty node attribute dict
         self._adj = self.adjlist_outer_dict_factory()  # empty adjacency dict
 
-        self.graph.update(attr)
 #--
     def __contains__(self, n):
         try:
@@ -37,6 +37,8 @@ class Graph:
         # Lazy View creation: overload the (class) property on the instance
         # Then future G.nodes use the existing View
         # setattr doesn't work because attribute already exists
+        #Crea un dizionario di nodi
+        #https://www.geeksforgeeks.org/get-a-dictionary-from-an-objects-fields/
         self.__dict__["nodes"] = nodes
         return nodes
 
@@ -71,10 +73,16 @@ class Graph:
         else:  # if nbunch is a sequence of nodes
 
             def bunch_iter(nlist, adj):
+                for n in nlist:
+                        if n in adj:
+                            yield n
+
+                '''
                 try:
                     for n in nlist:
                         if n in adj:
                             yield n
+                
                 except TypeError as err:
                     exc, message = err, err.args[0]
                     # capture error for non-sequence/iterator nbunch.
@@ -88,7 +96,7 @@ class Graph:
                             f"Node {n} in sequence nbunch is not a valid node."
                         )
                     raise exc
-
+                '''
             bunch = bunch_iter(nbunch, self._adj)
         return bunch
 

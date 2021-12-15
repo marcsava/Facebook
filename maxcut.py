@@ -46,6 +46,6 @@ def facebook_enmy(V,E):
     for key in E:
         G.add_edge((key[0]),(key[1]), weight = E[key])
     sum_weight , partition = maxcut(G, weight='weight')
-    print('The sum cut is', sum_weight)
+    print('The sum_weight is', sum_weight)
     return partition[0], partition[1]
 
