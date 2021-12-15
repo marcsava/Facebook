@@ -60,7 +60,6 @@ class Graph:
         datadict.update(attr)
         self._adj[u][v] = datadict
         self._adj[v][u] = datadict
-        print()
 #--
     @property
     def edges(self):

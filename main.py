@@ -1,5 +1,6 @@
 from graph import *
-from maxcut import *
+from graphProf import *
+from maxCutProf import *
 
 # graf of marc
 '''
@@ -13,6 +14,19 @@ G.add_edge('A', 'D', weight=94)
 current, partition = maxcut(G, weight='weight')
 print(current, partition)
 '''
+'''
+V = {'a','b','c','d','e'}
+E = {
+    ('a','b') : 2,
+    ('a','c') : 4,
+    ('b','d') : 3,
+    ('c','d') : 5,
+    ('d','e') : 3,
+}
+D, R = facebook_enmy(V,E)
+print ('Democrats ',D)
+print ('Republicans ',R)
+'''
 
 V = {'a','b','c','d','e'}
 E = {
@@ -25,4 +39,18 @@ E = {
 D, R = facebook_enmy(V,E)
 print ('Democrats ',D)
 print ('Republicans ',R)
+'''
+g = Graph()
 
+a = g.insert_vertex('a')
+b = g.insert_vertex('b')
+c = g.insert_vertex('c')
+d = g.insert_vertex('d')
+e = g.insert_vertex('e')
+g.insert_edge(a,b,2)
+g.insert_edge(a,c,4)
+g.insert_edge(b,d,3)
+g.insert_edge(c,d,5)
+g.insert_edge(d,e,3)
+
+'''
