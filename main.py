@@ -2,17 +2,26 @@ from graphProf import *
 
 if __name__ == "__main__":
     G = Graph()
-    V = {'a','b','c','d','e','z'}
+    V = {1,2,3,4,5,6,7,8,9}
     E = {
-        ('a','b') : 9,
-        ('a','c') : 8,
-        ('b','e') : 4,
-        ('b','d') : 4,
-        ('c','b') : 2,
-        ('c','e') : 3,
-        ('c','z') : 5,
-        ('e','z') : 6,
-        ('d','z') : 5,
+        (1,2) : 5,
+        (1,3) : 4,
+        (1,4) : 5,
+        (1,8) : 6,
+        (3,2) : 3,
+        (3,4) : 4,
+        (4,2) : 2,
+        (8,2) : 2,
+        (8,6) : 7,
+        (2,6) : 3,
+        (2,9) : 4,
+        (2,7) : 7,
+        (4,7) : 3,
+        (7,5) : 2,
+        (5,6) : 4,
+        (9,6) : 6,
+        (9,5) : 2,
+        (7,9) : 4,
     }
     '''
     D, R = facebook_enmy(V,E)
@@ -25,6 +34,5 @@ if __name__ == "__main__":
 
     for x in E:
       G.insert_edge(y[x[0]], y[x[1]], E[x])
-    order,paths = G.getAllPaths(y['a'],y['z'])
-    for x in order:
-        print(paths[x])
+    order,paths = G.getAllPaths(y[1],y[6])
+    G.maxFlow(order,paths,V)

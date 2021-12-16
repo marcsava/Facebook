@@ -170,11 +170,12 @@ class Graph:
     self._incoming[v][u] = e
     self.graph[u].append(v)
 
-  def getAllPathsUtil(self, u, d, visited, path):
+  def getAllPathsUtil(self, u, d, visited, path, start = None):
 
      # Mark the current node as visited and store in path
         visited[u]= True
-        path.append(u)
+        if start is not None:
+          path.append(self.get_edge(start,u))
         # If current vertex is same as destination, then print
         # current path[]
         if u == d:
@@ -184,9 +185,10 @@ class Graph:
             # Recur for all the vertices adjacent to this vertex
             for i in self.graph[u]:
                 if visited[i]== False:
-                    self.getAllPathsUtil(i, d, visited, path)
+                    self.getAllPathsUtil(i, d, visited, path,u)
         # Remove current vertex from path[] and mark it as unvisited
-        path.pop()
+        if (path.__len__()>0):
+          path.pop()
         visited[u]= False
 
 
@@ -208,14 +210,81 @@ class Graph:
           count = 0
           for path in self.pathAll:
             for v in path:
-              l.append(v.element())
-              if v == d:
+              l.append(v)
+              if v._destination == d:
                 t[count] = l.copy()
                 l.clear()
                 count += 1
           list_ordered = []
-          for k in sorted(t,key = lambda k: len(t[k]), reverse = True):
+          for k in sorted(t,key = lambda k: len(t[k])):
             list_ordered.append(k)
           return list_ordered, t
+
+
+  def maxFlow(self, order, paths,V):
+    l = []
+    list_depth = []
+    flow = 0
+    for x in order:
+      for ele in paths[x]:
+        l.append(ele._element)
+      mini = min(l)
+      flow += mini
+      l.clear()
+      if (mini > 0):
+        for ele in paths[x]:
+          ele._element -= mini
+          if (ele._element == 0):
+            list_depth.append(ele)
+    primo = []
+    secondo = []
+    s = 'a'
+    d = 'z'
+    '''
+    for ele in paths[5]:
+      if(list_depth.__contains__(ele)):
+        primo.append(ele._origin._element)
+    '''
+    check = False
+    nodi_inserire = []
+    vertex = []
+    tommy = []
+    for k in sorted(paths,key = lambda k: len(paths[k]), reverse=True):
+      tommy.append(k)
+    for x in tommy:
+      print()
+      for ele in paths[x]:
+        print(ele)
+        if(list_depth.__contains__(ele) and check == False):
+          list_depth.remove(ele)
+          if(not primo.__contains__(ele._origin._element) and not secondo.__contains__(ele._origin._element)):
+            primo.append(ele._origin._element)
+          if(ele._destination._element != d):
+            if (not secondo.__contains__(ele._destination._element) and not primo.__contains__(ele._destination._element)):
+              secondo.append(ele._destination._element)
+          check = True
+        else:
+          if (check == True):
+            if (not secondo.__contains__(ele._origin._element) and not primo.__contains__(ele._origin._element)):
+              secondo.append(ele._origin._element)
+            if (not secondo.__contains__(ele._destination._element) and not  primo.__contains__(ele._destination._element)):
+              secondo.append(ele._destination._element)
+          else:
+            nodi_inserire.append(ele)
+      for i in nodi_inserire:
+        if (not primo.__contains__(i._origin._element) and not secondo.__contains__(i._origin._element)):
+          primo.append(i._origin._element)
+        if (not primo.__contains__(i._destination._element) and not secondo.__contains__(i._destination._element)):
+          primo.append(i._destination._element)
+      check = False
+    print (primo)
+    print (secondo)
+
+
+
+
+
+
+
 
 
