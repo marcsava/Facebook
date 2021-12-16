@@ -18,10 +18,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from collections import defaultdict
 
 class Graph:
   """Representation of a simple graph using an adjacency map."""
-
   #------------------------- nested Vertex class -------------------------
   class Vertex:
     """Lightweight vertex structure for a graph."""
@@ -85,6 +85,8 @@ class Graph:
     self._outgoing = {}
     # only create second map for directed graph; use alias for undirected
     self._incoming = {} if directed else self._outgoing
+    self.graph = defaultdict(list)
+    self.pathAll = []
 
   def _validate_vertex(self, v):
     """Verify that v is a Vertex of this graph."""
@@ -165,4 +167,51 @@ class Graph:
     e = self.Edge(u, v, x)
     self._outgoing[u][v] = e
     self._incoming[v][u] = e
+    self.graph[u].append(v)
+
+  def printAllPathsUtil(self, u, d, visited, path):
+
+     # Mark the current node as visited and store in path
+        visited[u]= True
+        path.append(u)
+        # If current vertex is same as destination, then print
+        # current path[]
+        if u == d:
+          self.pathAll.append(path.copy())
+        else:
+            # If current vertex is not destination
+            # Recur for all the vertices adjacent to this vertex
+            for i in self.graph[u]:
+                if visited[i]== False:
+                    self.printAllPathsUtil(i, d, visited, path)
+        # Remove current vertex from path[] and mark it as unvisited
+        path.pop()
+        visited[u]= False
+
+
+      # Prints all paths from 's' to 'd'
+  def printAllPaths(self, s, d):
+          visited = {}
+          # Mark all the vertices as not visited
+          for vertex in self.vertices():
+            visited[vertex] = False
+
+
+          # Create an array to store paths
+          paths = []
+
+          # Call the recursive helper function to print all paths
+          self.printAllPathsUtil(s, d, visited, paths)
+          t = dict()
+          l = list()
+          count = 0
+          for path in self.pathAll:
+            for v in path:
+              l.append(v.element())
+              if v == d:
+                t[count] = l.copy()
+                l.clear()
+                count += 1
+          return t
+
 

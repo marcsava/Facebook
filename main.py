@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from graph import *
 from graphProf import *
 from maxCutProf import *
