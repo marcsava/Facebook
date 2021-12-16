@@ -1,43 +1,30 @@
-from collections import defaultdict
-
-from graph import *
 from graphProf import *
-from maxCutProf import *
 
-# graf of marc
-'''
-G = Graph()
-G.add_edge('A', 'B', weight=20)
-G.add_edge('A', 'C', weight=4)
-G.add_edge('B', 'D', weight=30)
-G.add_edge('C', 'D', weight=5)
-G.add_edge('D', 'E', weight=300)
-G.add_edge('A', 'D', weight=94)
-'''
+if __name__ == "__main__":
+    G = Graph()
+    V = {'a','b','c','d','e','z'}
+    E = {
+        ('a','b') : 9,
+        ('a','c') : 8,
+        ('b','e') : 4,
+        ('b','d') : 4,
+        ('c','b') : 2,
+        ('c','e') : 3,
+        ('c','z') : 5,
+        ('e','z') : 6,
+        ('d','z') : 5,
+    }
+    '''
+    D, R = facebook_enmy(V,E)
+    print ('Democrats ',D)
+    print ('Republicans ',R)
+    '''
+    y = {}
+    for v in V:
+        y[v] = G.insert_vertex(v)
 
-V = {'a','b','c','d','e'}
-E = {
-    ('a','b') : 2,
-    ('a','c') : 4,
-    ('b','d') : 3,
-    ('c','d') : 5,
-    ('d','e') : 3,
-}
-D, R = facebook_enmy(V,E)
-print ('Democrats ',D)
-print ('Republicans ',R)
-
-'''
-g = Graph()
-
-a = g.insert_vertex('a')
-b = g.insert_vertex('b')
-c = g.insert_vertex('c')
-d = g.insert_vertex('d')
-e = g.insert_vertex('e')
-g.insert_edge(a,b,2)
-g.insert_edge(a,c,4)
-g.insert_edge(b,d,3)
-g.insert_edge(c,d,5)
-g.insert_edge(d,e,3)
-'''
+    for x in E:
+      G.insert_edge(y[x[0]], y[x[1]], E[x])
+    order,paths = G.getAllPaths(y['a'],y['z'])
+    for x in order:
+        print(paths[x])

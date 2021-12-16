@@ -30,3 +30,6 @@ def facebook_enmy(V,E):
                                         vertex.append(edge[1])
                                         d.add(edge[1])
         return d, r
+
+def facebook_friend(V,E):
+        return True
