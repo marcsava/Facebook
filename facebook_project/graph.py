@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from collections import defaultdict
 from collections import OrderedDict
-from pippo import *
+from store_for_pathAll import *
 class Graph:
   """Representation of a simple graph using an adjacency map."""
   #------------------------- nested Vertex class -------------------------
@@ -194,26 +194,28 @@ class Graph:
         visited[u]= False
 
   def BFS(self,start,end, q = MyQUEUE()):
-
     temp_path = [start]
-    first = True
+
     q.enqueue(temp_path)
 
     while q.IsEmpty() == False:
         tmp_path = q.dequeue()
-        if first:
-          first = False
-          last_node = tmp_path[len(tmp_path)-1]
-        else:
-          last_node = tmp_path._destination
-        #print tmp_path
+        last_node = tmp_path[len(tmp_path)-1]
         if last_node == end:
-          self.pathAll.append(tmp_path.copy())
+          n = 0
+          path = []
+          while True:
+            path.append(self.get_edge(tmp_path[n],tmp_path[n+1]))
+            if (tmp_path[n+1] == last_node):
+              break
+            n += 1
+          self.pathAll.append(path.copy())
         for link_node in self.graph[last_node]:
             if link_node not in tmp_path:
                 new_path = []
-                new_path = self.get_edge(last_node,link_node)
+                new_path = tmp_path + [link_node]
                 q.enqueue(new_path)
+
 
   def getAllPaths(self, s, d):
           visited = {}
@@ -226,7 +228,6 @@ class Graph:
           paths = []
           # Call the recursive helper function to print all paths
           self.BFS(s, d)
-          '''
           t = dict()
           l = list()
           count = 0
@@ -243,7 +244,7 @@ class Graph:
           return list_ordered, t
 
 
-  def maxFlow(self, order, paths,V):
+  def maxFlow(self, order, paths,s,d):
     l = []
     list_depth = []
     flow = 0
@@ -260,24 +261,12 @@ class Graph:
             list_depth.append(ele)
     dem = []
     repu = []
-    s = 'a'
-    d = 'f'
-    dem.append(s)
-    repu.append(d)
-    '''
-          '''
-    for ele in paths[5]:
-      if(list_depth.__contains__(ele)):
-        dem.append(ele._origin._element)
-    ''''''
     print(flow)
     check = False
     nodi_inserire = []
-    vertex = []
     max_min = []
     for k in sorted(paths,key = lambda k: len(paths[k]), reverse=True):
       max_min.append(k)
-    '''        '''
     for x in max_min:
       for ele in paths[x]:
         print(ele)
@@ -303,7 +292,7 @@ class Graph:
         if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
           dem.append(i._destination._element)
       check = False
-    ''''''
+    '''
     for x in max_min:
       iter = 0
       for ele in paths[x]:
@@ -329,9 +318,8 @@ class Graph:
         dem.append(i._origin._element)
       if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
         dem.append(i._destination._element)
-    print(dem)
-    print(repu)
-
+    '''
+    return dem, repu
   def minCut(self,order, paths, s, d):
     l = []
     list_depth = []
@@ -347,6 +335,7 @@ class Graph:
           ele._element -= mini
           if (ele._element == 0):
             list_depth.append(ele)
+    print(flow)
     dem = []
     repu = []
     dem.append(s)
@@ -358,6 +347,9 @@ class Graph:
       max_min.append(k)
     for x in max_min:
       iter = 0
+      print()
+      for y in paths[x]:
+        print(y)
       for ele in paths[x]:
         iter += 1
         if(list_depth.__contains__(ele)):
@@ -397,7 +389,6 @@ class Graph:
         self.insert_edge(y[key],y['t'],V[key][1])
 
 
-'''
 
 
 

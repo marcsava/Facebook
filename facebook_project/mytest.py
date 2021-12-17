@@ -1,5 +1,4 @@
 #from func_timeout import func_timeout
-import sys
 from time import time
 from facebook import facebook_friend, facebook_enmy
 

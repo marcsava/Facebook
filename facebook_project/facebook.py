@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from graphProf import *
+from graph import *
 def facebook_enmy(V,E):
         d = set()
         r = set()

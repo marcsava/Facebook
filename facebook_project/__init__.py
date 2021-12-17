@@ -1,11 +1,7 @@
-import sys
+from graph import *
 
-from facebook import *
-from graphProf import *
-from facebook import *
-'''
 V = {'a','b','c','d'}
-
+'''
 E = {
     ('a','b') : 9,
     ('a','c') : 8,
@@ -17,8 +13,7 @@ E = {
     ('e','f') : 6,
     ('d','f') : 5,
 }
-'''
-'''
+
 E = {
     ('a','b') : 2,
     ('a','c') : 5,
@@ -32,11 +27,9 @@ E = {
     ('f','g') : 6,
     ('d','g') : 5,
 }
-'''
-#D, R = facebook_enmy(V,E)
-#print ('Democrats ',D)
-#print ('Republicans ',R)
-'''
+D, R = facebook_enmy(V,E)
+print ('Democrats ',D)
+print ('Republicans ',R)
 E = {
     ('a','b') : 8,
     ('a','c') : 4,
@@ -82,7 +75,6 @@ E = {
     ('b','d') : 1,
     ('c','d') : 5,
 }
-''' ''' 
 V = {
     'a' : (1,0),
     'b' : (3,2),
@@ -98,15 +90,18 @@ E = {
     ('d','e') : 3,
 }
 '''
-    # -----------------------------------
-V = {'a','b','c','d'}
+V = {'a','b','c','d','e','f'}
 E = {
-    ('a','b') : 5,
-    ('a','c') : 1,
-    ('a','d') : 2,
-    ('b','c') : 2,
-    ('b','d') : 1,
-    ('c','d') : 5,
+    ('a','b') : 9,
+    ('a','c') : 8,
+    ('c','b') : 2,
+    ('c','e') : 3,
+    ('c','f') : 5,
+    ('b','e') : 4,
+    ('b','d') : 4,
+    ('d','f') : 5,
+    ('e','f') : 6,
+
 }
 y = {}
 G = Graph(directed=True)
@@ -114,12 +109,8 @@ for key in V:
     y[key] = G.insert_vertex(key)
 for x in E:
     G.insert_edge(y[x[0]], y[x[1]], E[x])
-G.getAllPaths(y['a'],y['d'])
+#order, paths = G.getAllPaths(y['s'],y['t'])
 #G.modify(y,V)
-#order,paths = G.getAllPaths(y['s'],y['t'])
-#dem, repu = G.minCut(order,paths,'s','t')
-'''
-dem, repu=facebook_friend(V,E)
-print('dem ', dem)
-print('repu ', repu)
-'''
+order,paths = G.getAllPaths(y['a'],y['f'])
+dem, repu = G.minCut(order,paths,'a','f')
+print ('dem ',dem,'\nrepu ', repu)
