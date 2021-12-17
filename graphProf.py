@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from collections import defaultdict
 from collections import OrderedDict
-
+from pippo import *
 class Graph:
   """Representation of a simple graph using an adjacency map."""
   #------------------------- nested Vertex class -------------------------
@@ -163,12 +163,14 @@ class Graph:
     Raise a ValueError if u and v are not vertices of the graph.
     Raise a ValueError if u and v are already adjacent.
     """
+
     if self.get_edge(u, v) is not None:      # includes error checking
       raise ValueError('u and v are already adjacent')
     e = self.Edge(u, v, x)
     self._outgoing[u][v] = e
     self._incoming[v][u] = e
     self.graph[u].append(v)
+
 
   def getAllPathsUtil(self, u, d, visited, path, start = None):
 
@@ -191,8 +193,28 @@ class Graph:
           path.pop()
         visited[u]= False
 
+  def BFS(self,start,end, q = MyQUEUE()):
 
-      # Prints all paths from 's' to 'd'
+    temp_path = [start]
+    first = True
+    q.enqueue(temp_path)
+
+    while q.IsEmpty() == False:
+        tmp_path = q.dequeue()
+        if first:
+          first = False
+          last_node = tmp_path[len(tmp_path)-1]
+        else:
+          last_node = tmp_path._destination
+        #print tmp_path
+        if last_node == end:
+          self.pathAll.append(tmp_path.copy())
+        for link_node in self.graph[last_node]:
+            if link_node not in tmp_path:
+                new_path = []
+                new_path = self.get_edge(last_node,link_node)
+                q.enqueue(new_path)
+
   def getAllPaths(self, s, d):
           visited = {}
           # Mark all the vertices as not visited
@@ -202,9 +224,9 @@ class Graph:
 
           # Create an array to store paths
           paths = []
-
           # Call the recursive helper function to print all paths
-          self.getAllPathsUtil(s, d, visited, paths)
+          self.BFS(s, d)
+          '''
           t = dict()
           l = list()
           count = 0
@@ -236,53 +258,146 @@ class Graph:
           ele._element -= mini
           if (ele._element == 0):
             list_depth.append(ele)
-    primo = []
-    secondo = []
+    dem = []
+    repu = []
     s = 'a'
-    d = 'z'
+    d = 'f'
+    dem.append(s)
+    repu.append(d)
     '''
+          '''
     for ele in paths[5]:
       if(list_depth.__contains__(ele)):
-        primo.append(ele._origin._element)
-    '''
+        dem.append(ele._origin._element)
+    ''''''
+    print(flow)
     check = False
     nodi_inserire = []
     vertex = []
-    tommy = []
+    max_min = []
     for k in sorted(paths,key = lambda k: len(paths[k]), reverse=True):
-      tommy.append(k)
-    for x in tommy:
-      print()
+      max_min.append(k)
+    '''        '''
+    for x in max_min:
       for ele in paths[x]:
         print(ele)
         if(list_depth.__contains__(ele) and check == False):
           list_depth.remove(ele)
-          if(not primo.__contains__(ele._origin._element) and not secondo.__contains__(ele._origin._element)):
-            primo.append(ele._origin._element)
+          if(not dem.__contains__(ele._origin._element) and not repu.__contains__(ele._origin._element)):
+            dem.append(ele._origin._element)
           if(ele._destination._element != d):
-            if (not secondo.__contains__(ele._destination._element) and not primo.__contains__(ele._destination._element)):
-              secondo.append(ele._destination._element)
+            if (not repu.__contains__(ele._destination._element) and not dem.__contains__(ele._destination._element)):
+              repu.append(ele._destination._element)
           check = True
         else:
           if (check == True):
-            if (not secondo.__contains__(ele._origin._element) and not primo.__contains__(ele._origin._element)):
-              secondo.append(ele._origin._element)
-            if (not secondo.__contains__(ele._destination._element) and not  primo.__contains__(ele._destination._element)):
-              secondo.append(ele._destination._element)
+            if (not repu.__contains__(ele._origin._element) and not dem.__contains__(ele._origin._element)):
+              repu.append(ele._origin._element)
+            if (not repu.__contains__(ele._destination._element) and not  dem.__contains__(ele._destination._element)):
+              repu.append(ele._destination._element)
           else:
             nodi_inserire.append(ele)
       for i in nodi_inserire:
-        if (not primo.__contains__(i._origin._element) and not secondo.__contains__(i._origin._element)):
-          primo.append(i._origin._element)
-        if (not primo.__contains__(i._destination._element) and not secondo.__contains__(i._destination._element)):
-          primo.append(i._destination._element)
+        if (not dem.__contains__(i._origin._element) and not repu.__contains__(i._origin._element)):
+          dem.append(i._origin._element)
+        if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
+          dem.append(i._destination._element)
       check = False
-    print (primo)
-    print (secondo)
+    ''''''
+    for x in max_min:
+      iter = 0
+      for ele in paths[x]:
+        iter += 1
+        if(list_depth.__contains__(ele)):
+          if (iter == len(paths[x])):
+            if(ele._destination._element == d):
+              if(not dem.__contains__(ele._origin._element)):
+                dem.append(ele._origin._element)
+            else:
+              if(not repu.__contains__(ele._origin._element)):
+                repu.append(ele._origin._element)
+          else:
+            nodi_inserire.append(ele)
+        else:
+          if (iter == len(paths[x]) and ele._destination._element == d):
+            if(not repu.__contains__(ele._origin._element)):
+              repu.append(ele._origin._element)
+          else:
+            nodi_inserire.append(ele)
+    for i in nodi_inserire:
+      if (not dem.__contains__(i._origin._element) and not repu.__contains__(i._origin._element)):
+        dem.append(i._origin._element)
+      if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
+        dem.append(i._destination._element)
+    print(dem)
+    print(repu)
+
+  def minCut(self,order, paths, s, d):
+    l = []
+    list_depth = []
+    flow = 0
+    for x in order:
+      for ele in paths[x]:
+        l.append(ele._element)
+      mini = min(l)
+      flow += mini
+      l.clear()
+      if (mini > 0):
+        for ele in paths[x]:
+          ele._element -= mini
+          if (ele._element == 0):
+            list_depth.append(ele)
+    dem = []
+    repu = []
+    dem.append(s)
+    repu.append(d)
+    nodi_inserire = []
+    vertex = []
+    max_min = []
+    for k in sorted(paths,key = lambda k: len(paths[k]), reverse=True):
+      max_min.append(k)
+    for x in max_min:
+      iter = 0
+      for ele in paths[x]:
+        iter += 1
+        if(list_depth.__contains__(ele)):
+          if (iter == len(paths[x])):
+            if(ele._destination._element == d):
+              if(not dem.__contains__(ele._origin._element)):
+                dem.append(ele._origin._element)
+            else:
+              if(not repu.__contains__(ele._origin._element)):
+                repu.append(ele._origin._element)
+          else:
+            nodi_inserire.append(ele)
+        else:
+          if (iter == len(paths[x]) and ele._destination._element == d):
+            if(not repu.__contains__(ele._origin._element)):
+              repu.append(ele._origin._element)
+          else:
+            nodi_inserire.append(ele)
+    for i in nodi_inserire:
+      if (not dem.__contains__(i._origin._element) and not repu.__contains__(i._origin._element)):
+        dem.append(i._origin._element)
+      if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
+        dem.append(i._destination._element)
+    dem.remove(s)
+    repu.remove(d)
+    return dem,repu
 
 
+  def modify(self,y,V):
+    for arc in self.edges():
+      self.insert_edge(arc._destination,arc._origin,arc._element)
+    y['s'] = self.insert_vertex('s')
+    y['t'] = self.insert_vertex('t')
+    for key in V:
+      if(y[key] is not y['s'] and y[key] is not y['t']):
+        self.insert_edge(y['s'],y[key],V[key][0])
+        self.insert_edge(y[key],y['t'],V[key][1])
 
 
+'''
 
 
 

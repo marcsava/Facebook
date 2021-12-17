@@ -1,4 +1,4 @@
-from graphProf import *
+from FacebookDE.graphProf import *
 
 if __name__ == "__main__":
     G = Graph()

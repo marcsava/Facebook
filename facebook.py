@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+from graphProf import *
 def facebook_enmy(V,E):
         d = set()
         r = set()
@@ -32,4 +32,13 @@ def facebook_enmy(V,E):
         return d, r
 
 def facebook_friend(V,E):
-        return True
+        y = {}
+        G = Graph(directed=True)
+        for v in V:
+                y[v] = G.insert_vertex(v)
+        for x in E:
+                G.insert_edge(y[x[0]], y[x[1]], E[x])
+        G.modify(y,V)
+        order,paths = G.getAllPaths(y['s'],y['t'])
+        dem, repu = G.minCut(order,paths,'s','t')
+        return dem,repu
