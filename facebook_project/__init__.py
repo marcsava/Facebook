@@ -89,19 +89,41 @@ E = {
     ('c','d') : 5,
     ('d','e') : 3,
 }
-'''
-V = {'a','b','c','d','e','f'}
+V = {1,2,3,4,5,6,7,8,9}
 E = {
-    ('a','b') : 9,
-    ('a','c') : 8,
-    ('c','b') : 2,
-    ('c','e') : 3,
-    ('c','f') : 5,
-    ('b','e') : 4,
-    ('b','d') : 4,
-    ('d','f') : 5,
-    ('e','f') : 6,
-
+    (1,8) : 6,
+    (1,2) : 5,
+    (1,3) : 4,
+    (1,4) : 5,
+    (3,2) : 3,
+    (3,4) : 4,
+    (4,2) : 2,
+    (4,7) : 3,
+    (8,2) : 2,
+    (8,6) : 7,
+    (2,6) : 3,
+    (2,9) : 4,
+    (2,7) : 7,
+    (7,9) : 4,
+    (7,5) : 2,
+    (9,5) : 2,
+    (5,6) : 4,
+    (9,6) : 6,
+}
+'''
+V = {
+    'a' : (1,0),
+    'b' : (3,2),
+    'c' : (1,3),
+    'd' : (2,1),
+    'e' : (2,4),
+}
+E = {
+    ('a','b') : 2,
+    ('a','c') : 4,
+    ('b','d') : 3,
+    ('c','d') : 5,
+    ('d','e') : 3,
 }
 y = {}
 G = Graph(directed=True)
@@ -110,7 +132,7 @@ for key in V:
 for x in E:
     G.insert_edge(y[x[0]], y[x[1]], E[x])
 #order, paths = G.getAllPaths(y['s'],y['t'])
-#G.modify(y,V)
-order,paths = G.getAllPaths(y['a'],y['f'])
-dem, repu = G.minCut(order,paths,'a','f')
+G.modify(y,V)
+order,paths = G.getAllPaths(y['s'],y['t'])
+dem, repu = G.maxFlow(order,paths,'s','t')
 print ('dem ',dem,'\nrepu ', repu)

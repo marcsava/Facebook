@@ -40,5 +40,5 @@ def facebook_friend(V,E):
                 G.insert_edge(y[x[0]], y[x[1]], E[x])
         G.modify(y,V)
         order,paths = G.getAllPaths(y['s'],y['t'])
-        dem, repu = G.minCut(order,paths,'s','t')
+        dem, repu = G.maxFlow(order,paths,'s','t')
         return dem,repu
