@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from collections import defaultdict
 from collections import OrderedDict
-from utilityQueue import *
+
 class Graph:
   """Representation of a simple graph using an adjacency map."""
   #------------------------- nested Vertex class -------------------------
