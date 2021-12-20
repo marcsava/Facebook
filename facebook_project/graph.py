@@ -195,7 +195,6 @@ class Graph:
                 new_path = tmp_path + [link_node]
                 q.enqueue(new_path)
 
-
   def getAllPaths(self, s, d):
           visited = {}
           
@@ -218,88 +217,60 @@ class Graph:
             list_ordered.append(k)
           return list_ordered, t
 
-
-  def maxFlow(self, order, paths,s,d):
-    l = []
+  def minAllPath(self, order,paths):
     list_depth = []
+    mini = paths[order[0]][0]._element
     for x in order:
-      #Mettere un'espressione lambda per eliminare questa lista
       for ele in paths[x]:
-        l.append(ele._element)
-      mini = min(l)
-      print(mini)
-      l.clear()
+        if ele._element < mini : mini = ele._element
       if (mini > 0):
         for ele in paths[x]:
           ele._element -= mini
           if (ele._element == 0):
             list_depth.append(ele)
-    dem = []
-    repu = []
+    return list_depth
+
+  def maxFlow(self, order, paths, s, d, dem = [], repu = []) :
+    list_depth = self.minAllPath(order,paths)
+    dem.append(s)
+    repu.append(d)
     check = False
-    #creare una funzione apposita
     node_for_insert = []
     for x in sorted(paths,key = lambda x: len(paths[x]), reverse=True):
       for ele in paths[x]:
         if(list_depth.__contains__(ele) and check == False):
           list_depth.remove(ele)
-          if(not dem.__contains__(ele._origin._element) and not repu.__contains__(ele._origin._element)):
-            dem.append(ele._origin._element)
+          if(not repu.__contains__(ele._origin._element) and not dem.__contains__(ele._origin._element)):
+            repu.append(ele._origin._element)
           if(ele._destination._element != d):
             if (not repu.__contains__(ele._destination._element) and not dem.__contains__(ele._destination._element)):
               repu.append(ele._destination._element)
           check = True
         else:
           if (check == True):
-            if (not repu.__contains__(ele._origin._element) and not dem.__contains__(ele._origin._element)):
-              repu.append(ele._origin._element)
-            if (not repu.__contains__(ele._destination._element) and not  dem.__contains__(ele._destination._element)):
-              repu.append(ele._destination._element)
+            if (not dem.__contains__(ele._origin._element) and not repu.__contains__(ele._origin._element)):
+              dem.append(ele._origin._element)
+            if (not dem.__contains__(ele._destination._element) and not  repu.__contains__(ele._destination._element)):
+              dem.append(ele._destination._element)
           else:
             node_for_insert.append(ele)
       for i in node_for_insert:
-        if (not dem.__contains__(i._origin._element) and not repu.__contains__(i._origin._element)):
-          dem.append(i._origin._element)
-        if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
-          dem.append(i._destination._element)
+        if (not repu.__contains__(i._origin._element) and not dem.__contains__(i._origin._element)):
+          repu.append(i._origin._element)
+        if (not repu.__contains__(i._destination._element) and not dem.__contains__(i._destination._element)):
+          repu.append(i._destination._element)
       check = False
     return dem, repu
 
-  '''
-  def minCut(self,order, paths, s, d):
-    l = []
-    list_depth = []
-    flow = 0
-    for x in order:
-      for ele in paths[x]:
-        l.append(ele._element)
-      mini = min(l)
-      flow += mini
-      l.clear()
-      if (mini > 0):
-        for ele in paths[x]:
-          ele._element -= mini
-          if (ele._element == 0):
-            list_depth.append(ele)
-    print(flow)
-    dem = []
-    repu = []
+  def minCut(self,order, paths, s, d, dem = [], repu = []) :
+    list_depth = self.minAllPath(order,paths)
     dem.append(s)
     repu.append(d)
     node_for_insert = []
-    vertex = []
-    max_min = []
     for k in sorted(paths,key = lambda k: len(paths[k]), reverse=True):
-      max_min.append(k)
-    for x in max_min:
-      iter = 0
-      print()
-      for y in paths[x]:
-        print(y)
-      for ele in paths[x]:
-        iter += 1
+      for ele in paths[k]:
         if(list_depth.__contains__(ele)):
-          if (iter == len(paths[x])):
+          if (iter == len(paths[k])):
             if(ele._destination._element == d):
               if(not dem.__contains__(ele._origin._element)):
                 dem.append(ele._origin._element)
@@ -309,7 +280,7 @@ class Graph:
           else:
             node_for_insert.append(ele)
         else:
-          if (iter == len(paths[x]) and ele._destination._element == d):
+          if (ele._destination._element == d):
             if(not repu.__contains__(ele._origin._element)):
               repu.append(ele._origin._element)
           else:
@@ -320,7 +291,6 @@ class Graph:
       if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
         dem.append(i._destination._element)
     return dem,repu
-  '''
 
   def modify(self,y,V):
     for arc in self.edges():

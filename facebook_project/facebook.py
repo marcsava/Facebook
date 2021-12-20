@@ -1,11 +1,9 @@
-from collections import OrderedDict
 from graph import *
 def facebook_enmy(V,E):
         d = set()
         r = set()
         vertex = []
-        e_desc = OrderedDict(sorted(E.items(), key = lambda kv :kv[1], reverse= True))
-        for edge in e_desc:
+        for edge in OrderedDict(sorted(E.items(), key = lambda kv :kv[1], reverse= True)):
                 if edge[0] not in V or edge[1] not in V:
                         raise Exception('the arc in E is not present in V.')
                 if (edge[0] not in vertex):
