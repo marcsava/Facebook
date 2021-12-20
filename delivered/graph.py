@@ -77,6 +77,34 @@ class Graph:
     def __str__(self):
       return '({0},{1},{2})'.format(self._origin,self._destination,self._element)
 
+  # ------------------------- nested MyQueue class -------------------------
+  class MyQUEUE:  # just an implementation of a queue
+
+      def __init__(self):
+        self.holder = []
+
+      def enqueue(self, val):
+        self.holder.append(val)
+
+      def dequeue(self):
+        val = None
+        try:
+          val = self.holder[0]
+          if len(self.holder) == 1:
+            self.holder = []
+          else:
+            self.holder = self.holder[1:]
+        except:
+          pass
+
+        return val
+
+      def IsEmpty(self):
+        result = False
+        if len(self.holder) == 0:
+          result = True
+        return result
+
   #------------------------- Graph methods -------------------------
   def __init__(self, directed=False):
     """Create an empty graph (undirected, by default).
@@ -174,7 +202,6 @@ class Graph:
 
   def BFS(self,s,d, q = MyQUEUE()):
     temp_path = [s]
-
     q.enqueue(temp_path)
 
     while q.IsEmpty() == False:
