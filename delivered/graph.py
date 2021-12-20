@@ -219,10 +219,14 @@ class Graph:
 
   def minAllPath(self, order,paths):
     list_depth = []
-    mini = paths[order[0]][0]._element
+    flow = 0
+    l = []
     for x in order:
       for ele in paths[x]:
-        if ele._element < mini : mini = ele._element
+        l.append(ele._element)
+      mini = min(l)
+      flow +=mini
+      l.clear()
       if (mini > 0):
         for ele in paths[x]:
           ele._element -= mini
@@ -230,7 +234,7 @@ class Graph:
             list_depth.append(ele)
     return list_depth
 
-  def maxFlow(self, order, paths, s, d, dem = [], repu = []) :
+  def minCut(self, order, paths, s, d, dem = [], repu = []) :
     list_depth = self.minAllPath(order,paths)
     dem.append(s)
     repu.append(d)
@@ -240,57 +244,27 @@ class Graph:
       for ele in paths[x]:
         if(list_depth.__contains__(ele) and check == False):
           list_depth.remove(ele)
-          if(not repu.__contains__(ele._origin._element) and not dem.__contains__(ele._origin._element)):
-            repu.append(ele._origin._element)
+          if(not dem.__contains__(ele._origin._element) and not repu.__contains__(ele._origin._element)):
+            dem.append(ele._origin._element)
           if(ele._destination._element != d):
             if (not repu.__contains__(ele._destination._element) and not dem.__contains__(ele._destination._element)):
               repu.append(ele._destination._element)
           check = True
         else:
           if (check == True):
-            if (not dem.__contains__(ele._origin._element) and not repu.__contains__(ele._origin._element)):
-              dem.append(ele._origin._element)
-            if (not dem.__contains__(ele._destination._element) and not  repu.__contains__(ele._destination._element)):
-              dem.append(ele._destination._element)
+            if (not repu.__contains__(ele._origin._element) and not dem.__contains__(ele._origin._element)):
+              repu.append(ele._origin._element)
+            if (not repu.__contains__(ele._destination._element) and not  dem.__contains__(ele._destination._element)):
+              repu.append(ele._destination._element)
           else:
             node_for_insert.append(ele)
       for i in node_for_insert:
-        if (not repu.__contains__(i._origin._element) and not dem.__contains__(i._origin._element)):
-          repu.append(i._origin._element)
-        if (not repu.__contains__(i._destination._element) and not dem.__contains__(i._destination._element)):
-          repu.append(i._destination._element)
+        if (not dem.__contains__(i._origin._element) and not repu.__contains__(i._origin._element)):
+          dem.append(i._origin._element)
+        if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
+          dem.append(i._destination._element)
       check = False
     return dem, repu
-
-  def minCut(self,order, paths, s, d, dem = [], repu = []) :
-    list_depth = self.minAllPath(order,paths)
-    dem.append(s)
-    repu.append(d)
-    node_for_insert = []
-    for k in sorted(paths,key = lambda k: len(paths[k]), reverse=True):
-      for ele in paths[k]:
-        if(list_depth.__contains__(ele)):
-          if (iter == len(paths[k])):
-            if(ele._destination._element == d):
-              if(not dem.__contains__(ele._origin._element)):
-                dem.append(ele._origin._element)
-            else:
-              if(not repu.__contains__(ele._origin._element)):
-                repu.append(ele._origin._element)
-          else:
-            node_for_insert.append(ele)
-        else:
-          if (ele._destination._element == d):
-            if(not repu.__contains__(ele._origin._element)):
-              repu.append(ele._origin._element)
-          else:
-            node_for_insert.append(ele)
-    for i in node_for_insert:
-      if (not dem.__contains__(i._origin._element) and not repu.__contains__(i._origin._element)):
-        dem.append(i._origin._element)
-      if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
-        dem.append(i._destination._element)
-    return dem,repu
 
   def modify(self,y,V):
     for arc in self.edges():

@@ -219,10 +219,14 @@ class Graph:
 
   def minAllPath(self, order,paths):
     list_depth = []
-    mini = paths[order[0]][0]._element
+    flow = 0
+    l = []
     for x in order:
       for ele in paths[x]:
-        if ele._element < mini : mini = ele._element
+        l.append(ele._element)
+      mini = min(l)
+      flow +=mini
+      l.clear()
       if (mini > 0):
         for ele in paths[x]:
           ele._element -= mini
@@ -240,25 +244,25 @@ class Graph:
       for ele in paths[x]:
         if(list_depth.__contains__(ele) and check == False):
           list_depth.remove(ele)
-          if(not repu.__contains__(ele._origin._element) and not dem.__contains__(ele._origin._element)):
-            repu.append(ele._origin._element)
+          if(not dem.__contains__(ele._origin._element) and not repu.__contains__(ele._origin._element)):
+            dem.append(ele._origin._element)
           if(ele._destination._element != d):
             if (not repu.__contains__(ele._destination._element) and not dem.__contains__(ele._destination._element)):
               repu.append(ele._destination._element)
           check = True
         else:
           if (check == True):
-            if (not dem.__contains__(ele._origin._element) and not repu.__contains__(ele._origin._element)):
-              dem.append(ele._origin._element)
-            if (not dem.__contains__(ele._destination._element) and not  repu.__contains__(ele._destination._element)):
-              dem.append(ele._destination._element)
+            if (not repu.__contains__(ele._origin._element) and not dem.__contains__(ele._origin._element)):
+              repu.append(ele._origin._element)
+            if (not repu.__contains__(ele._destination._element) and not  dem.__contains__(ele._destination._element)):
+              repu.append(ele._destination._element)
           else:
             node_for_insert.append(ele)
       for i in node_for_insert:
-        if (not repu.__contains__(i._origin._element) and not dem.__contains__(i._origin._element)):
-          repu.append(i._origin._element)
-        if (not repu.__contains__(i._destination._element) and not dem.__contains__(i._destination._element)):
-          repu.append(i._destination._element)
+        if (not dem.__contains__(i._origin._element) and not repu.__contains__(i._origin._element)):
+          dem.append(i._origin._element)
+        if (not dem.__contains__(i._destination._element) and not repu.__contains__(i._destination._element)):
+          dem.append(i._destination._element)
       check = False
     return dem, repu
 

@@ -1,6 +1,6 @@
 from graph import *
 
-V = {'a','b','c','d'}
+V = {'a','b','c','d','e'}
 '''
 E = {
     ('a','b') : 9,
